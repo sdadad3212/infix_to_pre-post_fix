@@ -89,6 +89,61 @@ namespace WindowsFormsApp1
 
             return postfixExpr;
         }
+        static Boolean isOperator(char x)
+        {
+
+            switch (x)
+            {
+                case '+':
+                case '-':
+                case '/':
+                case '*':
+                    return true;
+            }
+            return false;
+        }
+        static String postToPre(String post_exp)
+        {
+            Stack<string> s = new Stack<string>();
+
+            
+            int length = post_exp.Length;
+
+         
+            for (int i = 0; i < length; i++)
+            {
+
+                
+                if (isOperator(post_exp[i]))
+                {
+
+                    
+                    String op1 = (String)s.Peek();
+                    s.Pop();
+                    String op2 = (String)s.Peek();
+                    s.Pop();
+
+                   
+                    String temp = post_exp[i] + op2 + op1;
+
+                   
+                    s.Push(temp);
+                }
+
+              
+                else
+                {
+
+                    
+                    s.Push(post_exp[i] + "");
+                }
+            }
+
+            String ans = "";
+            while (s.Count > 0)
+                ans += s.Pop();
+            return ans;
+        }
         public string Reverse(string text)
         {
             if (text == null) return null;
@@ -102,7 +157,7 @@ namespace WindowsFormsApp1
             infixExpr = textBox1.Text;
             postfixExpr = "постфикс: "+ToPostfix(infixExpr + "\r");
             label2.Text = postfixExpr;
-            postfixExpr = "префикс: " + (Reverse(ToPostfix(infixExpr + "\r")));
+            postfixExpr = "префикс: " + (postToPre(ToPostfix((infixExpr + "\r"))));
             label3.Text = postfixExpr;
         }
     }
